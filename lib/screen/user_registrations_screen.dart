@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:user_app_task/model/user_list_model.dart';
 import 'package:user_app_task/screen/register_screen.dart';
@@ -175,35 +177,45 @@ class _UserListScreenState extends State<UserListScreen> {
     );
   }
 
+  Future<bool> _onWillPop() async {
+    return await showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: const Text(
+            'Exit?',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: const Padding(
+            padding: EdgeInsets.all(10),
+            child: Text(
+              'Do you want to exit an App ?',
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+          actions: [
+            CupertinoDialogAction(
+              child: const Icon(
+                CupertinoIcons.clear_thick,
+              ),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+            CupertinoDialogAction(
+              child: const Icon(
+                CupertinoIcons.checkmark,
+              ),
+              onPressed: () => SystemNavigator.pop(),
+            ),
+          ],
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        final exit = await showDialog<bool>(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Exit App'),
-              content: const Text('Do you want to exit the app?'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, false);
-                  },
-                  child: const Text('No'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
-                  child: const Text('Yes'),
-                ),
-              ],
-            );
-          },
-        );
-        return exit ?? false;
-      },
+      onWillPop: ()=> _onWillPop(),
       child: Scaffold(
         // backgroundColor: Colors.grey.shade100,
         appBar: AppBar(

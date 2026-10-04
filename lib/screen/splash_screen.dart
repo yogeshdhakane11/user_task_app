@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:user_app_task/screen/user_registration_list_screen.dart';
+import 'package:user_app_task/screen/user_registrations_screen.dart';
 
 import 'login_screen.dart';
 
